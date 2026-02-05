@@ -1,16 +1,19 @@
 package com.samuelminana.tema4maven;
 
 import com.github.lalyos.jfiglet.FigletFont;
+import com.googlecode.lanterna.TerminalSize;
+import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
 
-        List <String> guion = new ArrayList<>();
+        List<String> guion = new ArrayList<>();
 
         String texto = "Samuel Minana";
         String banner = FigletFont.convertOneLine(texto);
@@ -36,7 +39,32 @@ public class Main {
         screen.startScreen();
         screen.setCursorPosition(null);
 
+        drawFrame(screen, guion,0);
+
         screen.readInput();
         screen.stopScreen();
-        }
     }
+
+        private static void drawFrame(Screen screen, List<String> lines, int yOffset)
+        throws IOException {
+            TerminalSize size = screen.getTerminalSize();
+            int width = size.getColumns();
+            int height = size.getRows();
+            screen.clear();
+            TextGraphics tg = screen.newTextGraphics();
+            for (int i = 0; i < lines.size(); i++) {
+                int y = yOffset + i;
+                if (y < 0 || y >= height) continue;
+                String line = lines.get(i);
+
+                int x = Math.max(0, (width - line.length()) / 2);
+                if (x >= width) continue;
+
+                String visible = (line.length() > width) ? line.substring(0, width) :
+                        line;
+                tg.putString(x, y, visible);
+            }
+            screen.refresh();
+    }
+}
+
