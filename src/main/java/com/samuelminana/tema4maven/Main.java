@@ -1,6 +1,9 @@
 package com.samuelminana.tema4maven;
 
 import com.github.lalyos.jfiglet.FigletFont;
+import com.googlecode.lanterna.screen.Screen;
+import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +32,11 @@ public class Main {
         guion.add("Idiomas: Castellano, Inglés, Valenciano");
         guion.add("Prácticas: Empresa online");
 
-        for (String linea : guion) {
-            System.out.println(linea);
+        Screen screen = new DefaultTerminalFactory().createScreen();
+        screen.startScreen();
+        screen.setCursorPosition(null);
+
+        screen.readInput();
+        screen.stopScreen();
         }
     }
-}
