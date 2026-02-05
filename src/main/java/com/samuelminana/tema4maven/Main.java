@@ -39,13 +39,24 @@ public class Main {
         screen.startScreen();
         screen.setCursorPosition(null);
 
-        drawFrame(screen, guion,0);
+        int height = screen.getTerminalSize().getRows();
+        int yOffset = height;
+
+        while (yOffset + guion.size() > 0) {
+            drawFrame(screen, guion, yOffset);
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignored){}
+
+            yOffset--;
+        }
 
         screen.readInput();
         screen.stopScreen();
     }
 
-        private static void drawFrame(Screen screen, List<String> lines, int yOffset)
+    private static void drawFrame(Screen screen, List<String> lines, int yOffset)
         throws IOException {
             TerminalSize size = screen.getTerminalSize();
             int width = size.getColumns();
